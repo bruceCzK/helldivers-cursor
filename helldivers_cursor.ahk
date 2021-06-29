@@ -6,20 +6,14 @@ SetWorkingDir %A_ScriptDir%
 
 ProcessIdentifier := "ahk_exe helldivers.exe"
 CrosshairId := ""
+CrosshairImage := "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAgMAAAAqbBEUAAAADFBMVEX///8AAAAA/yER/yMGwUjdAAAATElEQVR4Xt3SMQoAIAiGUZfu1+Li0ulc/vs1W0IgCo0tfYs8cBEk3tHOZ4YA6hhmsyDWKjqd2lNwgDN+637pCOhTxFNUmE2HABn3r1r9oEm3lJSOlAAAAABJRU5ErkJggg=="
 
 MainLabel:
-    CrosshairPath := "crosshair.png"
-
-    If (FileExist(CrosshairPath)) {
-        GenerateCrosshair(CrosshairPath)
-        SetTimer, UpdateCrosshair, 10
-    }
-    Else {
-        MsgBox, 0x10, Crosshair File Not Found, Please ensure that there is an image file named "%CrosshairPath%" in the same path as the script!
-    }
+    GenerateCrosshair()
+    SetTimer, UpdateCrosshair, 10
 Return
 
-GenerateCrosshair(CrosshairPath) {
+GenerateCrosshair() {
     global CrosshairId
 
     Gui, New, +E0x20 -Caption +LastFound +ToolWindow +AlwaysOnTop -DPIScale
@@ -27,7 +21,7 @@ GenerateCrosshair(CrosshairPath) {
     WinSet, TransColor, FFFFFF
     Gui, Margin, 0, 0
 
-    Gui, Add, Picture, w64 h64 +BackgroundTrans, %CrosshairPath%
+    Gui, Add, ActiveX, w64 h64 +BackgroundTrans, % "mshtml:<img src='" CrosshairImage "' />"
     Gui, Show, w64 h64 x-64 y-64
 
     CrosshairId := WinExist()
